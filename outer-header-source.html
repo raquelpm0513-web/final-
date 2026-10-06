@@ -1,0 +1,368 @@
+<!-- ============================================================
+  FIMECORP — Cabecera corporativa (HTML/CSS/JS puro)
+  Conversión fiel del componente React Header.tsx + FimecorpLogo.tsx
+  del proyecto nuevo, para poder pegarse en WordPress como bloque
+  "HTML personalizado" (sin necesidad de build de React).
+
+  CÓMO USARLO EN WORDPRESS:
+  1. Sube /logo.png a la raíz del hosting (o cambia la ruta de abajo
+     por la URL real, ej: https://fimecorp.com/wp-content/uploads/logo-fimecorp-nuevo.png)
+  2. En el editor de WordPress, añade un bloque "HTML personalizado"
+     (o "Custom HTML") al principio de la página/plantilla, y pega
+     todo este archivo dentro.
+  3. Si tu tema ya pone contenido justo debajo, añade el padding-top
+     indicado más abajo al <body> o al primer contenedor de contenido,
+     para que no quede tapado por la cabecera fija (position: fixed).
+============================================================= -->
+<style>
+  #fimecorp-header, #fimecorp-header * { box-sizing: border-box; }
+  #fimecorp-header {
+    font-family: 'Montserrat', system-ui, sans-serif;
+    position: fixed; top: 0; left: 0; width: 100%; z-index: 9999;
+  }
+  #fimecorp-header a { text-decoration: none; }
+  #fimecorp-header button { font-family: inherit; cursor: pointer; border: none; background: none; }
+
+  /* Barra superior de utilidad */
+  #fh-top-bar {
+    background: #001F3F;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    padding: 10px 0;
+    display: none;
+  }
+  @media (min-width: 768px) { #fh-top-bar { display: block; } }
+  #fh-top-bar .fh-inner {
+    max-width: 1440px; margin: 0 auto; padding: 0 40px;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  #fh-top-bar .fh-left { display: flex; align-items: center; gap: 24px; }
+  #fh-top-bar .fh-tagline {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 13px; font-weight: 500; color: #e5e7eb;
+  }
+  #fh-top-bar .fh-dot {
+    width: 10px; height: 10px; border-radius: 50%; background: #00BFBF;
+    animation: fh-pulse 2s infinite;
+  }
+  @keyframes fh-pulse { 0%,100%{opacity:1} 50%{opacity:.5} }
+  #fh-top-bar .fh-sep { color: rgba(255,255,255,0.2); }
+  #fh-top-bar .fh-support { display: flex; align-items: center; gap: 8px; font-size: 13px; color: #e5e7eb; }
+  #fh-top-bar .fh-right { display: flex; align-items: center; gap: 24px; font-size: 13px; }
+  #fh-top-bar .fh-right a { color: #e5e7eb; font-weight: 600; display: flex; align-items: center; gap: 6px; transition: color .2s; }
+  #fh-top-bar .fh-right a:hover { color: #00BFBF; }
+  .fh-icon { width: 14px; height: 14px; color: #00BFBF; flex-shrink: 0; }
+
+  /* Barra principal */
+  #fh-main-bar {
+    background: rgba(0,64,128,0.95);
+    backdrop-filter: blur(12px);
+    box-shadow: 0 10px 15px -3px rgba(0,0,0,.1);
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    padding: 20px 0;
+    transition: all .3s;
+  }
+  #fh-main-bar.fh-scrolled {
+    background: rgba(0,43,89,0.98);
+    padding: 12px 0;
+  }
+  #fh-main-bar .fh-inner {
+    max-width: 1440px; margin: 0 auto; padding: 0 40px;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+
+  #fh-logo-btn { position: relative; display: flex; align-items: center; padding: 6px; }
+  #fh-logo-btn img { position: relative; z-index: 10; height: 64px; width: auto; max-width: 340px; object-fit: contain; display: block; }
+  #fh-logo-btn .fh-halo1 {
+    position: absolute; inset: 0; left: -16px; right: -16px;
+    background: rgba(255,255,255,.95); border-radius: 999px; filter: blur(20px); z-index: 0; opacity: .9;
+  }
+  #fh-logo-btn .fh-halo2 {
+    position: absolute; inset: -2px; background: rgba(255,255,255,.6); border-radius: 16px; filter: blur(8px); z-index: 0;
+  }
+
+  /* Navegación desktop */
+  #fh-nav { display: none; align-items: center; gap: 6px; background: rgba(255,255,255,.05); padding: 6px; border-radius: 16px; border: 1px solid rgba(255,255,255,.1); }
+  @media (min-width: 1024px) { #fh-nav { display: flex; } }
+  #fh-nav button {
+    padding: 10px 18px; border-radius: 12px; font-size: 15px; font-weight: 700;
+    letter-spacing: .02em; color: #e5e7eb; position: relative; transition: all .2s;
+  }
+  #fh-nav button:hover { color: #fff; background: rgba(255,255,255,.1); }
+  #fh-nav button.fh-active { color: #fff; background: rgba(255,255,255,.15); border: 1px solid rgba(255,255,255,.15); }
+  #fh-nav button.fh-active::after {
+    content: ''; position: absolute; bottom: 4px; left: 50%; transform: translateX(-50%);
+    width: 32px; height: 2.5px; background: #00BFBF; border-radius: 999px;
+  }
+
+  /* Selector de idioma */
+  #fh-lang-wrap { display: none; align-items: center; gap: 12px; min-width: 160px; justify-content: flex-end; position: relative; }
+  @media (min-width: 1024px) { #fh-lang-wrap { display: flex; } }
+
+  #fh-linkedin-btn {
+    display: none; align-items: center; justify-content: center;
+    width: 52px; height: 52px; border-radius: 12px;
+    background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.15);
+    color: #fff; transition: background .2s;
+  }
+  #fh-linkedin-btn svg { width: 26px; height: 26px; }
+  #fh-linkedin-btn:hover { background: #0A66C2; border-color: #0A66C2; }
+  @media (min-width: 1024px) { #fh-linkedin-btn { display: flex; } }
+  #fh-lang-btn {
+    display: flex; align-items: center; gap: 10px; padding: 10px 16px; border-radius: 12px;
+    background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.15); color: #fff;
+    font-size: 14px; font-weight: 700;
+  }
+  #fh-lang-btn:hover { background: rgba(255,255,255,.2); }
+  #fh-lang-menu {
+    display: none; position: absolute; right: 0; top: calc(100% + 8px); width: 208px;
+    background: #002B59; border: 1px solid rgba(255,255,255,.2); border-radius: 16px;
+    box-shadow: 0 25px 50px -12px rgba(0,0,0,.5); padding: 8px 0; z-index: 50;
+  }
+  #fh-lang-menu.fh-open { display: block; }
+  #fh-lang-menu .fh-lang-title { padding: 8px 16px; border-bottom: 1px solid rgba(255,255,255,.1); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: #00BFBF; font-weight: 800; }
+  #fh-lang-menu button { width: 100%; padding: 12px 16px; text-align: left; font-size: 14px; font-weight: 600; display: flex; align-items: center; justify-content: space-between; color: rgba(255,255,255,.8); }
+  #fh-lang-menu button:hover { background: rgba(255,255,255,.05); color: #fff; }
+  #fh-lang-menu button.fh-lang-active { color: #00BFBF; background: rgba(255,255,255,.1); font-weight: 700; }
+
+  /* Botones móviles */
+  #fh-mobile-actions { display: flex; align-items: center; gap: 12px; }
+  @media (min-width: 1024px) { #fh-mobile-actions { display: none; } }
+  #fh-mobile-actions button { color: #fff; background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.1); padding: 8px; border-radius: 8px; display: flex; }
+  #fh-mail-btn { background: rgba(255,255,255,.1) !important; }
+
+  /* Drawer móvil */
+  #fh-drawer {
+    display: none; position: fixed; inset: 0; top: 90px; background: rgba(0,31,63,.98);
+    backdrop-filter: blur(8px); z-index: 40; overflow-y: auto;
+  }
+  #fh-drawer.fh-open { display: block; }
+  @media (min-width: 1024px) { #fh-drawer { display: none !important; } }
+  #fh-drawer .fh-drawer-inner { padding: 24px; display: flex; flex-direction: column; gap: 24px; min-height: calc(100% - 24px); justify-content: space-between; }
+  #fh-drawer .fh-drawer-label { font-size: 11px; text-transform: uppercase; letter-spacing: .15em; color: #00BFBF; border-bottom: 1px solid rgba(255,255,255,.1); padding-bottom: 8px; margin-bottom: 12px; }
+  #fh-drawer .fh-drawer-nav button {
+    width: 100%; text-align: left; padding: 14px 16px; border-radius: 12px; font-size: 16px; font-weight: 600;
+    display: flex; align-items: center; justify-content: space-between; color: rgba(255,255,255,.9); margin-bottom: 8px;
+  }
+  #fh-drawer .fh-drawer-nav button.fh-active { background: linear-gradient(to right, rgba(0,64,128,.4), rgba(0,191,191,.2)); color: #00BFBF; border: 1px solid rgba(0,191,191,.3); }
+  #fh-drawer-footer { background: rgba(0,43,89,.8); border: 1px solid rgba(255,255,255,.1); border-radius: 16px; padding: 20px; }
+  #fh-drawer-footer .fh-lang-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; padding-bottom: 16px; border-bottom: 1px solid rgba(255,255,255,.1); margin-bottom: 16px; }
+  #fh-drawer-footer .fh-lang-grid button { padding: 8px 12px; border-radius: 12px; font-size: 12px; font-weight: 700; border: 1px solid rgba(255,255,255,.1); background: rgba(255,255,255,.05); color: rgba(255,255,255,.7); }
+  #fh-drawer-footer .fh-lang-grid button.fh-lang-active { background: rgba(0,191,191,.2); color: #00BFBF; border-color: rgba(0,191,191,.4); }
+  #fh-drawer-footer .fh-info-label { font-size: 12px; color: rgba(255,255,255,.4); }
+  #fh-drawer-footer .fh-info-value { font-size: 14px; color: rgba(255,255,255,.8); margin-top: 2px; }
+  #fh-drawer-footer .fh-cta {
+    width: 100%; margin-top: 16px; padding: 16px; border-radius: 12px; text-align: center; font-weight: 700; font-size: 14px;
+    color: #fff; background: linear-gradient(to right, #004080, #00BFBF);
+  }
+
+  /* Aviso de espaciado (solo referencia visual en preview) */
+  #fh-spacer { height: 130px; }
+  @media (max-width: 767px) { #fh-spacer { height: 100px; } }
+</style>
+
+<header id="fimecorp-header">
+  <div id="fh-top-bar">
+    <div class="fh-inner">
+      <div class="fh-left">
+        <span class="fh-tagline"><span class="fh-dot"></span>Partner Tecnológico en Oncología Radioterápica y Física Médica</span>
+        <span class="fh-sep">|</span>
+        <span class="fh-support">
+          <svg class="fh-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20 15 15 0 0 1 0-20"/></svg>
+          Soporte Autorizado para España y Portugal
+        </span>
+      </div>
+      <div class="fh-right">
+        <a href="tel:+34925817162"><svg class="fh-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>925 81 71 62</a>
+        <a href="mailto:info@fimecorp.com"><svg class="fh-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v16H4z"/><path d="m22 6-10 7L2 6"/></svg>info@fimecorp.com</a>
+      </div>
+    </div>
+  </div>
+
+  <div id="fh-main-bar">
+    <div class="fh-inner">
+      <button id="fh-logo-btn" onclick="window.location.href='/'">
+        <img src="{{PLUGIN_URL}}fimecorp-logo-white.svg" alt="FIMECORP INTERNATIONAL S.L.">
+      </button>
+
+      <nav id="fh-nav">
+        <button data-page="inicio" class="fh-active">Inicio</button>
+        <button data-page="sobre-nosotros">Conócenos</button>
+        <button data-page="fabricantes">Partners</button>
+        <button data-page="soluciones">Especialidades</button>
+        <button data-page="unete-a-nosotros">Únete a nosotros</button>
+        <button data-page="contacto">Contacto</button>
+      </nav>
+
+      <a id="fh-linkedin-btn" href="https://es.linkedin.com/company/fimecorp-international" target="_blank" rel="noopener noreferrer" title="Fimecorp en LinkedIn">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452z"/></svg>
+      </a>
+
+      <div id="fh-lang-wrap">
+        <button id="fh-lang-btn">
+          <svg class="fh-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20 15 15 0 0 1 0-20"/></svg>
+          <span id="fh-lang-label">🇪🇸 ES</span>
+          <svg class="fh-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:rgba(255,255,255,.7)"><path d="m6 9 6 6 6-6"/></svg>
+        </button>
+        <div id="fh-lang-menu">
+          <div class="fh-lang-title">Idioma / Language</div>
+          <button data-lang="es" class="fh-lang-active"><span>🇪🇸 Español</span></button>
+          <button data-lang="en"><span>🇬🇧 English</span></button>
+        </div>
+      </div>
+
+      <div id="fh-mobile-actions">
+        <button id="fh-mail-btn" title="Contacto">
+          <svg class="fh-icon" style="width:20px;height:20px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v16H4z"/><path d="m22 6-10 7L2 6"/></svg>
+        </button>
+        <button id="fh-burger-btn" aria-label="Toggle menu">
+          <svg id="fh-icon-open" style="width:24px;height:24px;color:#fff" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+          <svg id="fh-icon-close" style="width:24px;height:24px;color:#00BFBF;display:none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div id="fh-drawer">
+    <div class="fh-drawer-inner">
+      <div>
+        <p class="fh-drawer-label">NAVEGACIÓN CORPORATIVA</p>
+        <div class="fh-drawer-nav">
+          <button data-page="inicio" class="fh-active">Inicio <span>→</span></button>
+          <button data-page="sobre-nosotros">Conócenos <span>→</span></button>
+          <button data-page="fabricantes">Partners <span>→</span></button>
+          <button data-page="soluciones">Especialidades <span>→</span></button>
+          <button data-page="unete-a-nosotros">Únete a nosotros <span>→</span></button>
+          <button data-page="contacto">Contacto <span>→</span></button>
+        </div>
+      </div>
+      <div id="fh-drawer-footer">
+        <div class="fh-lang-grid">
+          <button data-lang="es" class="fh-lang-active">🇪🇸 Español (ES)</button>
+          <button data-lang="en">🇬🇧 English (EN)</button>
+        </div>
+        <div>
+          <p class="fh-info-label">SOPORTE TÉCNICO INMEDIATO</p>
+          <a href="tel:+34925817162" style="color:#00BFBF;font-size:18px;font-weight:700;display:block;margin-top:4px">925 81 71 62</a>
+        </div>
+        <div style="margin-top:12px">
+          <p class="fh-info-label">SEDE CENTRAL</p>
+          <p class="fh-info-value">Cjón. Mérida, 11, Talavera de la Reina</p>
+        </div>
+        <button class="fh-cta" data-page="contacto">Contactar con Fimecorp</button>
+      </div>
+    </div>
+  </div>
+</header>
+<div id="fh-spacer"></div>
+
+<script data-no-optimize="1" data-cfasync="false">
+(function () {
+  var mainBar = document.getElementById('fh-main-bar');
+  var topBar = document.getElementById('fh-top-bar');
+  var spacer = document.getElementById('fh-spacer');
+
+  // El alto real de la cabecera varía (según idioma, si cabe el texto en
+  // una o dos líneas, etc.), así que en vez de un hueco fijo que a veces se
+  // queda corto y tapa el principio del contenido, se mide el alto real de
+  // la cabecera y se ajusta el hueco para que coincida siempre.
+  function syncSpacerHeight() {
+    var h = mainBar.getBoundingClientRect().height + (topBar ? topBar.getBoundingClientRect().height : 0);
+    spacer.style.height = h + 'px';
+  }
+  syncSpacerHeight();
+  window.addEventListener('resize', syncSpacerHeight);
+  window.addEventListener('load', syncSpacerHeight);
+  setTimeout(syncSpacerHeight, 300);
+  setTimeout(syncSpacerHeight, 1000);
+  var mainBar = document.getElementById('fh-main-bar');
+  var burger = document.getElementById('fh-burger-btn');
+  var drawer = document.getElementById('fh-drawer');
+  var iconOpen = document.getElementById('fh-icon-open');
+  var iconClose = document.getElementById('fh-icon-close');
+  var langBtn = document.getElementById('fh-lang-btn');
+  var langMenu = document.getElementById('fh-lang-menu');
+  var langLabel = document.getElementById('fh-lang-label');
+
+  function getIframe() { return document.getElementById('fimecorp-portal-iframe'); }
+
+  // Efecto de scroll (siempre visible; solo cambia de estilo al hacer scroll)
+  window.addEventListener('scroll', function () {
+    if (window.scrollY > 40) mainBar.classList.add('fh-scrolled');
+    else mainBar.classList.remove('fh-scrolled');
+  });
+
+  // Menú móvil
+  burger.addEventListener('click', function () {
+    var open = drawer.classList.toggle('fh-open');
+    iconOpen.style.display = open ? 'none' : 'block';
+    iconClose.style.display = open ? 'block' : 'none';
+  });
+  document.getElementById('fh-mail-btn').addEventListener('click', function () {
+    goToPage('contacto');
+  });
+
+  // Selector de idioma: llama directamente a la función de traducción que
+  // vive dentro del iframe (expuesta como window.fimecorpSetLanguage).
+  langBtn.addEventListener('click', function (e) {
+    e.stopPropagation();
+    langMenu.classList.toggle('fh-open');
+  });
+  document.addEventListener('click', function () { langMenu.classList.remove('fh-open'); });
+
+  function setLang(lang) {
+    document.querySelectorAll('[data-lang]').forEach(function (btn) {
+      btn.classList.toggle('fh-lang-active', btn.getAttribute('data-lang') === lang);
+    });
+    langLabel.textContent = lang === 'es' ? '🇪🇸 ES' : '🇬🇧 EN';
+    langMenu.classList.remove('fh-open');
+    // Nota: la traducción automática se quitó (rompía el diseño y traducía
+    // solo a medias). El selector se queda listo para conectarse el día que
+    // haya contenido traducido de verdad.
+  }
+  document.querySelectorAll('[data-lang]').forEach(function (btn) {
+    btn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      setLang(btn.getAttribute('data-lang'));
+    });
+  });
+
+  // Navegación entre páginas: la app vive dentro del iframe y cambia de
+  // "página" internamente (sin recargar ni cambiar de URL). Para navegar
+  // desde esta cabecera externa, se simula un clic sobre el botón interno
+  // de la app que tiene el mismo texto, y luego se sube hasta el iframe.
+  var PAGE_LABELS = {
+    'inicio': 'inicio',
+    'sobre-nosotros': 'conócenos',
+    'fabricantes': 'partners',
+    'soluciones': 'especialidades',
+    'unete-a-nosotros': 'únete a nosotros',
+    'contacto': 'contacto'
+  };
+
+  function goToPage(pageId) {
+    document.querySelectorAll('[data-page]').forEach(function (btn) {
+      btn.classList.toggle('fh-active', btn.getAttribute('data-page') === pageId);
+    });
+    drawer.classList.remove('fh-open');
+    iconOpen.style.display = 'block';
+    iconClose.style.display = 'none';
+
+    try {
+      var doc = getIframe().contentWindow.document;
+      var label = PAGE_LABELS[pageId];
+      var candidates = doc.querySelectorAll('nav button, header button');
+      for (var i = 0; i < candidates.length; i++) {
+        var text = (candidates[i].textContent || '').trim().toLowerCase();
+        if (text === label) { candidates[i].click(); break; }
+      }
+    } catch (e) {}
+
+    var headerHeight = mainBar.getBoundingClientRect().height + document.getElementById('fh-top-bar').getBoundingClientRect().height;
+    var top = window.scrollY + getIframe().getBoundingClientRect().top - headerHeight - 10;
+    window.scrollTo({ top: top, behavior: 'smooth' });
+  }
+  document.querySelectorAll('[data-page]').forEach(function (btn) {
+    btn.addEventListener('click', function () { goToPage(btn.getAttribute('data-page')); });
+  });
+})();
+</script>

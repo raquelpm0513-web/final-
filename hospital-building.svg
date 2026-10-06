@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 260" role="img" aria-label="Clínica Fimecorp">
+<title>Clínica Hospitalaria Fimecorp</title>
+<defs>
+  <linearGradient id="leftFace" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#203d58"/><stop offset="1" stop-color="#142a41"/></linearGradient>
+  <linearGradient id="rightFace" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#17344f"/><stop offset="1" stop-color="#0d2135"/></linearGradient>
+  <linearGradient id="topFace" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#3a536b"/><stop offset="1" stop-color="#223a52"/></linearGradient>
+  <linearGradient id="cyanFace" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#0ee5ff"/><stop offset="1" stop-color="#0878dc"/></linearGradient>
+  <linearGradient id="cyanEdge" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#25f3ff"/><stop offset="1" stop-color="#117be4"/></linearGradient>
+  <radialGradient id="shadowFade"><stop stop-color="#020b18" stop-opacity=".95"/><stop offset="1" stop-color="#020b18" stop-opacity="0"/></radialGradient>
+  <filter id="selectedGlow" x="-80%" y="-80%" width="260%" height="260%"><feDropShadow dx="0" dy="0" stdDeviation="4" flood-color="#00d9ff" flood-opacity=".95"/><feDropShadow dx="0" dy="0" stdDeviation="12" flood-color="#008cff" flood-opacity=".48"/></filter>
+  <filter id="windowGlow" x="-250%" y="-250%" width="600%" height="600%"><feDropShadow dx="0" dy="0" stdDeviation="3" flood-color="#00e5ff" flood-opacity="1"/></filter>
+  <filter id="softGlow" x="-80%" y="-300%" width="260%" height="700%"><feGaussianBlur stdDeviation="7"/></filter>
+</defs>
+
+<ellipse class="ground-shadow" cx="110" cy="225" rx="60" ry="12" fill="url(#shadowFade)" opacity=".85"/>
+
+<g class="building-core">
+  <path fill="url(#topFace)" stroke="#48627b" d="M49 97 111 60 172 96 110 133Z"/>
+  <path fill="url(#leftFace)" stroke="#2b465f" d="M49 97 110 133v77l-61-36Z"/>
+  <path fill="url(#rightFace)" stroke="#203c56" d="M110 133 172 96v78l-62 36Z"/>
+  <path class="accent" fill="url(#cyanEdge)" d="M49 108 110 144 172 107v7l-62 37-61-36Z"/>
+  <g class="window" fill="#36d7df"><path d="M59 128 72 136v13l-13-8Z"/><path d="M80 140 93 148v13l-13-8Z"/><path d="M59 156 72 164v13l-13-8Z"/><path d="M128 145 143 136v13l-15 9Z"/><path d="M150 132 165 123v13l-15 9Z"/><path d="M128 173 143 164v13l-15 9Z"/></g>
+  <path fill="#071827" d="M96 183 110 191v19l-14-8Z"/><path fill="#0a2033" d="M110 191 124 183v19l-14 8Z"/>
+  <path class="accent" fill="#29e6f2" d="M103 79h14v8h8v14h-8v8h-14v-8h-8V87h8Z" transform="skewY(1)"/>
+</g>
+</svg>

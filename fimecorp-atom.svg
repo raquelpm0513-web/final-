@@ -1,0 +1,14 @@
+<svg viewBox="0 0 240 240" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- FIMECORP Official Atom Vector Symbol -->
+  <!-- Transverse horizontal ellipse -->
+  <ellipse cx="120" cy="128" rx="98" ry="36" stroke="#007CB0" stroke-width="9" stroke-linecap="round" transform="rotate(-8 120 128)" />
+  <!-- Left orbital ellipse (White crescent) -->
+  <ellipse cx="120" cy="120" rx="95" ry="36" stroke="#FFFFFF" stroke-width="9.5" stroke-linecap="round" transform="rotate(-48 120 120)" />
+  <!-- Right orbital ellipse (Cyan loop) -->
+  <ellipse cx="120" cy="120" rx="95" ry="36" stroke="#00BFBF" stroke-width="9.5" stroke-linecap="round" transform="rotate(48 120 120)" />
+  <!-- Lower orbital focal curve accent -->
+  <path d="M 102 138 Q 120 162 142 140" stroke="#00BFBF" stroke-width="6" stroke-linecap="round" fill="none" />
+  <path d="M 98 132 L 102 138" stroke="#FFFFFF" stroke-width="6" stroke-linecap="round" />
+  <!-- Central nucleus core -->
+  <circle cx="120" cy="120" r="15" fill="#00BFBF" />
+</svg>

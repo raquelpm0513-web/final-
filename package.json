@@ -1,0 +1,19 @@
+{
+  "name": "fimecorp-portal",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "node server.js",
+    "build": "node build.js",
+    "lint": "node --check server.js build.js",
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^5.2.1",
+    "pdf-lib": "^1.17.1"
+  },
+  "devDependencies": {
+    "@resvg/resvg-js": "^2.6.2",
+    "jsdom": "^30.1.1"
+  }
+}

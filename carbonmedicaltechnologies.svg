@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 320" width="100%" height="100%">
+  <defs>
+    <radialGradient id="carbonSphere" cx="72%" cy="38%" r="58%" fx="75%" fy="32%">
+      <stop offset="0%" stop-color="#FFFFFF" />
+      <stop offset="20%" stop-color="#E5E8EB" />
+      <stop offset="45%" stop-color="#ACB1B9" />
+      <stop offset="75%" stop-color="#60646B" />
+      <stop offset="92%" stop-color="#3B3E44" />
+      <stop offset="100%" stop-color="#26282C" />
+    </radialGradient>
+    <filter id="softShadow" x="-10%" y="-10%" width="130%" height="130%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-opacity="0.15" />
+    </filter>
+  </defs>
+
+  <!-- 3D Shaded Metallic Sphere on the Right -->
+  <circle cx="440" cy="160" r="150" fill="url(#carbonSphere)" />
+
+  <!-- Typography -->
+  <!-- Top: CARBON -->
+  <text x="125" y="105" 
+        font-family="Impact, 'Franklin Gothic Bold', 'Arial Black', sans-serif" 
+        font-size="68" 
+        font-weight="900" 
+        letter-spacing="2.5" 
+        fill="#1C1D1F">CARBON</text>
+
+  <!-- Middle: MEDICAL (Indented & Overlapping Sphere) -->
+  <text x="220" y="185" 
+        font-family="Impact, 'Franklin Gothic Bold', 'Arial Black', sans-serif" 
+        font-size="68" 
+        font-weight="900" 
+        letter-spacing="2.5" 
+        fill="#005CB9">MEDICAL</text>
+
+  <!-- Bottom: TECHNOLOGIES -->
+  <text x="10" y="265" 
+        font-family="Impact, 'Franklin Gothic Bold', 'Arial Black', sans-serif" 
+        font-size="63" 
+        font-weight="900" 
+        letter-spacing="1.5" 
+        fill="#1C1D1F">TECHNOLOGIES</text>
+</svg>
